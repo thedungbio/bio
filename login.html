@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="vi" class="h-full bg-slate-50">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Đăng nhập — HSK-Web 3.0</title>
+  <style>
+    /* Reset & Base fonts */
+    *, ::before, ::after {
+      box-sizing: border-box;
+      border-width: 0;
+      border-style: solid;
+      border-color: #e2e8f0;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.5;
+      color: #0f172a;
+      background-color: #f8fafc;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .hanzi-font {
+      font-family: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+
+    /* Container & Layout */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem;
+      width: 100%;
+    }
+    .flex-center {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Header */
+    header {
+      background: #ffffff;
+      border-bottom: 1px solid #e2e8f0;
+      padding: 0.75rem 1.5rem;
+    }
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .logo-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: inherit;
+    }
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+      color: #ffffff;
+      font-weight: bold;
+      font-size: 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 6px -1px rgba(220, 38, 38, 0.25);
+    }
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: #475569;
+      background: #f1f5f9;
+      text-decoration: none;
+      transition: all 0.15s ease;
+    }
+    .back-btn:hover {
+      background: #e2e8f0;
+      color: #0f172a;
+    }
+
+    /* Main Login Card */
+    main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2.5rem 1rem;
+      position: relative;
+    }
+    .bg-decor {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 260px;
+      color: rgba(220, 38, 38, 0.03);
+      font-weight: 900;
+      user-select: none;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .login-card {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-width: 460px;
+      background: #ffffff;
+      border-radius: 1.25rem;
+      box-shadow: 0 20px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+      border: 1px solid #e2e8f0;
+      padding: 2rem;
+    }
+
+    .card-header {
+      text-align: center;
+      margin-bottom: 1.75rem;
+    }
+    .card-title {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #0f172a;
+      letter-spacing: -0.02em;
+    }
+    .card-subtitle {
+      font-size: 0.875rem;
+      color: #64748b;
+      margin-top: 0.35rem;
+    }
+
+    /* Forms */
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+    .form-label {
+      display: block;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: #334155;
+      margin-bottom: 0.4rem;
+    }
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .input-icon {
+      position: absolute;
+      left: 0.875rem;
+      width: 18px;
+      height: 18px;
+      color: #94a3b8;
+      pointer-events: none;
+    }
+    .form-input {
+      width: 100%;
+      padding: 0.65rem 0.875rem 0.65rem 2.6rem;
+      border-radius: 0.75rem;
+      border: 1px solid #cbd5e1;
+      font-size: 0.9375rem;
+      color: #0f172a;
+      background: #ffffff;
+      outline: none;
+      transition: all 0.15s ease;
+    }
+    .form-input:focus {
+      border-color: #dc2626;
+      box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.15);
+    }
+    .password-toggle {
+      position: absolute;
+      right: 0.875rem;
+      background: none;
+      border: none;
+      color: #64748b;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      padding: 0.25rem;
+    }
+    .password-toggle:hover {
+      color: #0f172a;
+    }
+
+    /* Submit Button */
+    .submit-btn {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border-radius: 0.75rem;
+      background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+      color: #ffffff;
+      font-size: 0.9375rem;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      box-shadow: 0 4px 6px -1px rgba(220, 38, 38, 0.3);
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+    .submit-btn:hover {
+      background: linear-gradient(135deg, #b91c1c 0%, #991b1b 100%);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 10px -1px rgba(220, 38, 38, 0.4);
+    }
+    .submit-btn:active {
+      transform: translateY(0);
+    }
+
+    /* Alert / Error Box */
+    .alert {
+      padding: 0.75rem 1rem;
+      border-radius: 0.75rem;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      margin-bottom: 1.25rem;
+      display: none;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .alert-error {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      color: #b91c1c;
+    }
+    .alert-success {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      color: #047857;
+    }
+
+    .auth-mode-switch {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
+      margin-bottom: 1.25rem;
+      padding: 0.25rem;
+      border-radius: 0.75rem;
+      background: #f1f5f9;
+    }
+    .auth-mode-btn {
+      padding: 0.6rem;
+      border-radius: 0.5rem;
+      background: transparent;
+      color: #475569;
+      font-size: 0.8125rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .auth-mode-btn.active {
+      background: #ffffff;
+      color: #b91c1c;
+      box-shadow: 0 1px 3px rgba(15, 23, 42, 0.12);
+    }
+    .demo-notice {
+      margin-bottom: 1.25rem;
+      padding: 0.65rem 0.75rem;
+      border: 1px solid #fde68a;
+      border-radius: 0.75rem;
+      background: #fffbeb;
+      color: #92400e;
+      font-size: 0.75rem;
+    }
+
+    /* Quick Fill Credentials Box */
+    .quick-box {
+      margin-top: 1.5rem;
+      padding-top: 1.25rem;
+      border-top: 1px dashed #e2e8f0;
+    }
+    .quick-title {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .credential-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 0.75rem;
+      padding: 0.75rem;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: border-color 0.15s ease;
+    }
+    .credential-card.admin-highlight {
+      background: #fff8f8;
+      border-color: #fca5a5;
+    }
+    .cred-info {
+      font-size: 0.8125rem;
+    }
+    .cred-role {
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+    .cred-details {
+      color: #475569;
+      font-family: ui-monospace, SFMono-Regular, monospace;
+      font-size: 0.75rem;
+      margin-top: 0.15rem;
+    }
+    .quick-btn {
+      padding: 0.35rem 0.75rem;
+      border-radius: 0.5rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      color: #334155;
+      transition: all 0.15s ease;
+    }
+    .quick-btn:hover {
+      background: #dc2626;
+      color: #ffffff;
+      border-color: #dc2626;
+    }
+
+    /* Active Session Card (If already logged in) */
+    .session-card {
+      display: none;
+      background: #f0fdf4;
+      border: 2px solid #86efac;
+      border-radius: 1rem;
+      padding: 1.25rem;
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+    .session-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.25rem 0.75rem;
+      background: #dcfce7;
+      color: #15803d;
+      font-weight: 700;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      margin-bottom: 0.5rem;
+    }
+
+    /* Shake animation on wrong pass */
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-6px); }
+      40%, 80% { transform: translateX(6px); }
+    }
+    .shake {
+      animation: shake 0.4s ease-in-out;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="header-inner">
+      <a href="index.html" class="logo-badge" title="Về trang chủ HSK-Web">
+        <div class="logo-icon">
+          <span class="hanzi-font">汉</span>
+        </div>
+        <div>
+          <div style="display:flex; align-items:center; gap:0.5rem;">
+            <strong style="font-size:1.125rem; color:#0f172a;">HSK-Web</strong>
+            <span style="font-size:11px; font-weight:700; background:#fef2f2; color:#b91c1c; border:1px solid #fecaca; padding:1px 6px; border-radius:4px;">HSK 3.0</span>
+          </div>
+          <p style="font-size:0.75rem; color:#64748b;">Hệ thống học tiếng Trung dành cho người Việt</p>
+        </div>
+      </a>
+
+      <a href="index.html" class="back-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="19" y1="12" x2="5" y2="12"></line>
+          <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+        <span>Vào học ngay (Không cần đăng nhập)</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- MAIN BODY -->
+  <main>
+    <div class="bg-decor hanzi-font">登录</div>
+
+    <div class="login-card">
+
+      <!-- Trạng thái nếu đã đăng nhập -->
+      <div id="session-box" class="session-card">
+        <div class="session-badge">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 6L9 17l-5-5"></path>
+          </svg>
+          Đang có phiên đăng nhập
+        </div>
+        <p style="font-size:0.875rem; color:#166534; font-weight:600;">
+          Bạn đang đăng nhập với tài khoản: <strong id="session-username" style="color:#0f172a; text-decoration:underline;"></strong>
+        </p>
+        <p style="font-size:0.75rem; color:#15803d; margin-top:0.25rem;">
+          Vai trò: <span id="session-role-text" style="font-weight:700;">Quản trị viên (Admin)</span>
+        </p>
+        <div style="display:flex; gap:0.5rem; justify-content:center; margin-top:1rem;">
+          <a href="index.html" style="padding:0.5rem 1rem; border-radius:0.5rem; background:#16a34a; color:#fff; font-size:0.8125rem; font-weight:700; text-decoration:none; display:inline-flex; align-items:center; gap:0.25rem;">
+            Vào bảng điều khiển →
+          </a>
+          <button onclick="handleLogout()" style="padding:0.5rem 0.875rem; border-radius:0.5rem; background:#fff; color:#b91c1c; border:1px solid #fca5a5; font-size:0.8125rem; font-weight:700; cursor:pointer;">
+            Đăng xuất
+          </button>
+        </div>
+      </div>
+
+      <!-- Tiêu đề form -->
+      <div class="card-header">
+        <div style="display:inline-flex; align-items:center; justify-content:center; width:52px; height:52px; border-radius:1rem; background:#fee2e2; color:#dc2626; margin-bottom:0.75rem;">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg>
+        </div>
+        <h1 class="card-title">Đăng Nhập Hệ Thống</h1>
+        <p class="card-subtitle">Nhập tài khoản để truy cập quyền Quản trị & học tập HSK 3.0</p>
+      </div>
+
+      <!-- Hộp thông báo lỗi / thành công -->
+      <div id="alert-error" class="alert alert-error">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="8" x2="12" y2="12"></line>
+          <line x1="12" y1="16" x2="12.01" y2="16"></line>
+        </svg>
+        <span id="error-message">Tên đăng nhập hoặc mật khẩu không chính xác!</span>
+      </div>
+
+      <div id="alert-success" class="alert alert-success">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+          <polyline points="22 4 12 14.01 9 11.01"></polyline>
+        </svg>
+        <span id="success-message">Đăng nhập thành công! Đang chuyển hướng...</span>
+      </div>
+
+      <!-- Form đăng nhập chính -->
+      <div class="demo-notice">
+        Bản demo lưu tài khoản trên trình duyệt này; tài khoản chưa được đồng bộ hoặc xác thực trên máy chủ.
+      </div>
+
+      <div id="auth-mode-switch" class="auth-mode-switch">
+        <button type="button" id="mode-login" class="auth-mode-btn active" onclick="setAuthMode('login')">Đăng nhập</button>
+        <button type="button" id="mode-register" class="auth-mode-btn" onclick="setAuthMode('register')">Tạo tài khoản</button>
+      </div>
+
+      <form id="login-form" onsubmit="handleLogin(event)">
+        <!-- Email hoặc tên đăng nhập -->
+        <div class="form-group">
+          <label class="form-label" for="login-identifier">Email hoặc tên đăng nhập</label>
+          <div class="input-wrapper">
+            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+            <input type="text" id="login-identifier" class="form-input" placeholder="Nhập email hoặc tên đăng nhập" required autofocus autocomplete="username">
+          </div>
+        </div>
+
+        <!-- Password -->
+        <div class="form-group">
+          <label class="form-label" for="password">Mật khẩu</label>
+          <div class="input-wrapper">
+            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+            <input type="password" id="password" class="form-input" placeholder="Nhập mật khẩu" required autocomplete="current-password">
+            <button type="button" class="password-toggle" onclick="togglePasswordVisibility()" title="Ẩn/Hiện mật khẩu">
+              <svg id="eye-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Nút Submit -->
+        <button type="submit" id="btn-submit" class="submit-btn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+            <polyline points="10 17 15 12 10 7"></polyline>
+            <line x1="15" y1="12" x2="3" y2="12"></line>
+          </svg>
+          <span>Đăng Nhập Ngay</span>
+        </button>
+      </form>
+
+      <form id="register-form" onsubmit="handleRegister(event)" style="display:none;">
+        <div class="form-group">
+          <label class="form-label" for="register-username">Tên đăng nhập</label>
+          <div class="input-wrapper">
+            <input type="text" id="register-username" class="form-input" style="padding-left:0.875rem;" placeholder="Tạo tên đăng nhập" required minlength="3" maxlength="24" autocomplete="username">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="register-email">Email</label>
+          <div class="input-wrapper">
+            <input type="email" id="register-email" class="form-input" style="padding-left:0.875rem;" placeholder="ban@example.com" required autocomplete="email">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="register-password">Mật khẩu riêng (tối thiểu 8 ký tự)</label>
+          <div class="input-wrapper">
+            <input type="password" id="register-password" class="form-input" style="padding-left:0.875rem;" placeholder="Tạo mật khẩu" required minlength="8" autocomplete="new-password">
+          </div>
+        </div>
+        <button type="submit" class="submit-btn">
+          <span>Tạo tài khoản</span>
+        </button>
+      </form>
+
+      <form id="nickname-form" onsubmit="saveNickname(event)" style="display:none;">
+        <div class="form-group">
+          <label class="form-label" for="nickname">Biệt danh hiển thị</label>
+          <div class="input-wrapper">
+            <input type="text" id="nickname" class="form-input" style="padding-left:0.875rem;" placeholder="Chọn biệt danh riêng của bạn" required minlength="2" maxlength="24" autocomplete="nickname">
+          </div>
+          <p style="font-size:0.75rem; color:#64748b; margin-top:0.4rem;">Biệt danh phải khác với biệt danh của các tài khoản khác trên trình duyệt này.</p>
+        </div>
+        <button type="submit" class="submit-btn">
+          <span>Lưu biệt danh và tiếp tục</span>
+        </button>
+      </form>
+
+      <!-- Quick Accounts Section -->
+      <div class="quick-box">
+        <div class="quick-title">
+          <span>Tài khoản thử nghiệm</span>
+          <span style="font-size:0.7rem; color:#94a3b8; font-weight:normal;">Bấm nút để đăng nhập nhanh</span>
+        </div>
+
+        <div class="credential-card admin-highlight">
+          <div class="cred-info">
+            <div class="cred-role" style="color:#b91c1c;">
+              <span>🛡️ Quản trị viên (Admin)</span>
+            </div>
+            <div class="cred-details">
+              Tài khoản: <strong>Admin</strong> &bull; MK: <strong>22022009</strong>
+            </div>
+          </div>
+          <button type="button" class="quick-btn" onclick="quickLogin('Admin')" style="background:#dc2626; color:#fff; border-color:#dc2626;">
+            Đăng nhập ngay
+          </button>
+        </div>
+
+        <div class="credential-card">
+          <div class="cred-info">
+            <div class="cred-role" style="color:#1d4ed8;">
+              <span>👩‍🏫 Giáo viên</span>
+            </div>
+            <div class="cred-details">
+              Tài khoản: <strong>Giaovien</strong> &bull; MK: <strong>123456</strong>
+            </div>
+          </div>
+          <button type="button" class="quick-btn" onclick="quickLogin('Giaovien')">
+            Đăng nhập ngay
+          </button>
+        </div>
+
+        <div class="credential-card">
+          <div class="cred-info">
+            <div class="cred-role" style="color:#15803d;">
+              <span>👨‍🎓 Học sinh</span>
+            </div>
+            <div class="cred-details">
+              Tài khoản: <strong>Hocsinh</strong> &bull; MK: <strong>123456</strong>
+            </div>
+          </div>
+          <button type="button" class="quick-btn" onclick="quickLogin('Hocsinh')">
+            Đăng nhập ngay
+          </button>
+        </div>
+      </div>
+
+      <!-- Quay lại trang chủ -->
+      <div style="margin-top:1.5rem; text-align:center;">
+        <a href="index.html" style="font-size:0.8125rem; color:#64748b; text-decoration:none; display:inline-flex; align-items:center; gap:0.35rem;">
+          ← Quay lại giao diện HSK-Web không cần tài khoản
+        </a>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer style="text-align:center; padding:1.25rem; font-size:0.75rem; color:#94a3b8; border-top:1px solid #e2e8f0; background:#fff;">
+    HSK-Web 3.0 &copy; Hệ thống Quản trị & Học tiếng Trung chuẩn HSK 3.0 cho học sinh Việt Nam.
+  </footer>
+
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      checkExistingSession();
+    });
+
+    function togglePasswordVisibility() {
+      const pwdInput = document.getElementById('password');
+      const eyeIcon = document.getElementById('eye-icon');
+      if (pwdInput.type === 'password') {
+        pwdInput.type = 'text';
+        eyeIcon.innerHTML = `
+          <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+          <line x1="1" y1="1" x2="23" y2="23"></line>
+        `;
+      } else {
+        pwdInput.type = 'password';
+        eyeIcon.innerHTML = `
+          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+          <circle cx="12" cy="12" r="3"></circle>
+        `;
+      }
+    }
+
+    function hideAlerts() {
+      document.getElementById('alert-error').style.display = 'none';
+      document.getElementById('alert-success').style.display = 'none';
+    }
+  </script>
+  <script>
+    const ACCOUNT_STORAGE_KEY = 'hsk_demo_accounts';
+    const BUILT_IN_ACCOUNTS = [
+      { username: 'Admin', email: 'admin@hskweb.local', password: '22022009', role: 'admin', fullName: 'Quản trị viên Hệ thống', nickname: 'Admin' },
+      { username: 'Giaovien', email: 'giaovien@hskweb.local', password: '123456', role: 'teacher', fullName: 'Giáo viên HSK', nickname: 'Giáo viên' },
+      { username: 'Hocsinh', email: 'hocsinh@hskweb.local', password: '123456', role: 'student', fullName: 'Học sinh HSK 1', nickname: 'Học sinh' }
+    ];
+    let pendingAccount = null;
+
+    function normalizeValue(value) {
+      return (value || '').toString().trim().normalize('NFC').toLocaleLowerCase('vi-VN');
+    }
+
+    async function hashPassword(password) {
+      if (window.crypto && window.crypto.subtle) {
+        try {
+          const bytes = new TextEncoder().encode(password);
+          const digest = await window.crypto.subtle.digest('SHA-256', bytes);
+          return Array.from(new Uint8Array(digest), byte => byte.toString(16).padStart(2, '0')).join('');
+        } catch (e) {
+          // fallback bên dưới nếu subtle crypto bị hạn chế context
+        }
+      }
+      let hash = 0;
+      for (let i = 0; i < password.length; i++) {
+        const char = password.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash |= 0;
+      }
+      return 'fb_' + Math.abs(hash).toString(16) + '_' + password.length;
+    }
+
+    async function loadAccounts() {
+      let accounts = [];
+      try {
+        const storedAccounts = localStorage.getItem(ACCOUNT_STORAGE_KEY);
+        if (storedAccounts !== null) {
+          const parsed = JSON.parse(storedAccounts);
+          if (Array.isArray(parsed)) {
+            accounts = parsed;
+          }
+        }
+      } catch (e) {
+        accounts = [];
+      }
+
+      // Luôn đảm bảo tài khoản hệ thống (Admin: 22022009, Giaovien: 123456, Hocsinh: 123456) luôn hợp lệ
+      for (const builtIn of BUILT_IN_ACCOUNTS) {
+        const hash = await hashPassword(builtIn.password);
+        const idx = accounts.findIndex(a => a && normalizeValue(a.username) === normalizeValue(builtIn.username));
+        if (idx >= 0) {
+          accounts[idx].role = builtIn.role;
+          accounts[idx].password = builtIn.password;
+          accounts[idx].passwordHash = hash;
+          if (!accounts[idx].nickname) {
+            accounts[idx].nickname = builtIn.nickname;
+          }
+          if (!accounts[idx].fullName) {
+            accounts[idx].fullName = builtIn.fullName;
+          }
+        } else {
+          accounts.push({
+            username: builtIn.username,
+            email: builtIn.email,
+            password: builtIn.password,
+            passwordHash: hash,
+            role: builtIn.role,
+            fullName: builtIn.fullName,
+            nickname: builtIn.nickname
+          });
+        }
+      }
+
+      saveAccounts(accounts);
+      return accounts;
+    }
+
+    function saveAccounts(accounts) {
+      try {
+        localStorage.setItem(ACCOUNT_STORAGE_KEY, JSON.stringify(accounts));
+      } catch (e) {
+        console.error('Không thể lưu accounts:', e);
+      }
+    }
+
+    function checkExistingSession() {
+      const savedUserStr = localStorage.getItem('hsk_auth_user');
+      if (!savedUserStr) return;
+      try {
+        const user = JSON.parse(savedUserStr);
+        document.getElementById('session-username').textContent = user.nickname || user.username || user.fullName || 'Tài khoản';
+        const roleMap = { admin: '🛡️ Quản trị viên (Admin)', teacher: '👩‍🏫 Giáo viên', student: '👨‍🎓 Học sinh' };
+        document.getElementById('session-role-text').textContent = roleMap[user.role] || user.role;
+        document.getElementById('session-box').style.display = 'block';
+      } catch (error) {
+        showError('Không thể đọc phiên đăng nhập đã lưu. Vui lòng đăng nhập lại.');
+      }
+    }
+
+    function setAuthMode(mode) {
+      hideAlerts();
+      const loginMode = mode === 'login';
+      document.getElementById('login-form').style.display = loginMode ? 'block' : 'none';
+      document.getElementById('register-form').style.display = loginMode ? 'none' : 'block';
+      document.getElementById('mode-login').classList.toggle('active', loginMode);
+      document.getElementById('mode-register').classList.toggle('active', !loginMode);
+    }
+
+    function showError(message) {
+      document.getElementById('error-message').textContent = message;
+      document.getElementById('alert-error').style.display = 'flex';
+    }
+
+    function showNicknameStep(account) {
+      pendingAccount = account;
+      document.getElementById('auth-mode-switch').style.display = 'none';
+      document.getElementById('login-form').style.display = 'none';
+      document.getElementById('register-form').style.display = 'none';
+      document.getElementById('nickname-form').style.display = 'block';
+      document.getElementById('nickname').focus();
+      hideAlerts();
+    }
+
+    async function handleLogin(event) {
+      if (event) event.preventDefault();
+      hideAlerts();
+      const identifierInput = document.getElementById('login-identifier');
+      const passwordInput = document.getElementById('password');
+      const identifier = normalizeValue(identifierInput.value);
+      const password = passwordInput.value;
+
+      if (!identifier || !password) {
+        showError('Vui lòng nhập tên đăng nhập/email và mật khẩu.');
+        return;
+      }
+
+      try {
+        const accounts = await loadAccounts();
+        const passwordHash = await hashPassword(password);
+        const matchedAccount = accounts.find(account => {
+          if (!account) return false;
+          const matchId = (normalizeValue(account.username) === identifier || normalizeValue(account.email) === identifier);
+          if (!matchId) return false;
+
+          const matchPassword = (account.passwordHash && account.passwordHash === passwordHash) ||
+                                (account.password && account.password === password) ||
+                                (normalizeValue(account.username) === 'admin' && password === '22022009') ||
+                                (normalizeValue(account.username) === 'giaovien' && password === '123456') ||
+                                (normalizeValue(account.username) === 'hocsinh' && password === '123456');
+          return matchPassword;
+        });
+
+        if (!matchedAccount) {
+          showError('Email/tên đăng nhập hoặc mật khẩu không chính xác. Vui lòng kiểm tra lại.');
+          return;
+        }
+
+        // Tự động gán nickname nếu chưa có để không bị kẹt
+        if (!matchedAccount.nickname) {
+          matchedAccount.nickname = matchedAccount.username;
+        }
+
+        completeLogin(matchedAccount);
+      } catch (error) {
+        showError(error.message || 'Không thể đọc dữ liệu tài khoản trên trình duyệt.');
+      }
+    }
+
+    async function quickLogin(targetUsername) {
+      hideAlerts();
+      try {
+        const accounts = await loadAccounts();
+        const matched = accounts.find(a => normalizeValue(a.username) === normalizeValue(targetUsername));
+        if (matched) {
+          document.getElementById('login-identifier').value = matched.username;
+          document.getElementById('password').value = matched.password || (normalizeValue(targetUsername) === 'admin' ? '22022009' : '123456');
+          completeLogin(matched);
+        } else {
+          showError(`Không tìm thấy tài khoản ${targetUsername}.`);
+        }
+      } catch (e) {
+        showError('Không thể thực hiện đăng nhập nhanh: ' + e.message);
+      }
+    }
+
+    async function handleRegister(event) {
+      event.preventDefault();
+      hideAlerts();
+      const username = document.getElementById('register-username').value.trim().normalize('NFC');
+      const email = document.getElementById('register-email').value.trim().toLowerCase();
+      const password = document.getElementById('register-password').value;
+      if (username.length < 3 || username.length > 24) {
+        showError('Tên đăng nhập cần có từ 3 đến 24 ký tự.');
+        return;
+      }
+      if (password.length < 6) {
+        showError('Mật khẩu cần có ít nhất 6 ký tự.');
+        return;
+      }
+
+      try {
+        const accounts = await loadAccounts();
+        if (accounts.some(account => normalizeValue(account.username) === normalizeValue(username))) {
+          showError('Tên đăng nhập này đã được sử dụng. Hãy chọn tên khác.');
+          return;
+        }
+        if (accounts.some(account => normalizeValue(account.email) === normalizeValue(email))) {
+          showError('Email này đã được đăng ký.');
+          return;
+        }
+        const account = {
+          username,
+          email,
+          password,
+          passwordHash: await hashPassword(password),
+          role: 'student',
+          fullName: username,
+          nickname: username
+        };
+        accounts.push(account);
+        saveAccounts(accounts);
+        completeLogin(account);
+      } catch (error) {
+        showError(error.message || 'Không thể lưu tài khoản trên trình duyệt.');
+      }
+    }
+
+    function saveNickname(event) {
+      event.preventDefault();
+      hideAlerts();
+      if (!pendingAccount) {
+        showError('Không tìm thấy tài khoản cần đặt biệt danh. Vui lòng đăng nhập lại.');
+        return;
+      }
+      const nickname = document.getElementById('nickname').value.trim().normalize('NFC');
+      if (nickname.length < 2 || nickname.length > 24) {
+        showError('Biệt danh cần có từ 2 đến 24 ký tự.');
+        return;
+      }
+
+      loadAccounts().then(accounts => {
+        const duplicate = accounts.some(account =>
+          account.username !== pendingAccount.username &&
+          account.nickname &&
+          normalizeValue(account.nickname) === normalizeValue(nickname)
+        );
+        if (duplicate) {
+          showError('Biệt danh này đã được sử dụng. Hãy chọn biệt danh khác.');
+          return;
+        }
+        const account = accounts.find(item => item.username === pendingAccount.username);
+        if (!account) {
+          showError('Không tìm thấy tài khoản. Vui lòng đăng nhập lại.');
+          return;
+        }
+        account.nickname = nickname;
+        saveAccounts(accounts);
+        completeLogin(account);
+      }).catch(error => {
+        showError(error.message || 'Không thể lưu biệt danh trên trình duyệt.');
+      });
+    }
+
+    function completeLogin(account) {
+      const userPayload = {
+        username: account.username,
+        email: account.email,
+        nickname: account.nickname || account.username,
+        role: account.role,
+        fullName: account.fullName || account.username,
+        loggedInAt: new Date().toISOString()
+      };
+      try {
+        localStorage.setItem('hsk_auth_user', JSON.stringify(userPayload));
+        localStorage.setItem('hsk_current_role', account.role);
+      } catch (error) {
+        showError('Không thể lưu phiên đăng nhập. Vui lòng bật bộ nhớ trình duyệt và thử lại.');
+        return;
+      }
+      document.getElementById('success-message').textContent =
+        `Đăng nhập thành công! Xin chào ${account.nickname || account.username} (${account.role.toUpperCase()}). Đang chuyển hướng...`;
+      document.getElementById('alert-success').style.display = 'flex';
+      const submitBtn = document.getElementById('btn-submit');
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.style.opacity = '0.7';
+      }
+      setTimeout(() => {
+        window.location.href = 'index.html';
+      }, 500);
+    }
+
+    function handleLogout() {
+      localStorage.removeItem('hsk_auth_user');
+      localStorage.removeItem('hsk_current_role');
+      document.getElementById('session-box').style.display = 'none';
+      document.getElementById('login-identifier').value = '';
+      document.getElementById('password').value = '';
+      hideAlerts();
+      document.getElementById('success-message').textContent = 'Đã đăng xuất tài khoản thành công.';
+      document.getElementById('alert-success').style.display = 'flex';
+      setTimeout(() => {
+        document.getElementById('alert-success').style.display = 'none';
+      }, 2500);
+    }
+  </script>
+</body>
+</html>
